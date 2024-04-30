@@ -1,10 +1,10 @@
-from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
-import undetected_chromedriver as uc
-from bs4 import BeautifulSoup
+from selenium import webdriver 
+from selenium.webdriver.support.ui import WebDriverWait 
+from selenium.webdriver.support import expected_conditions as EC 
+from selenium.webdriver.common.by import By 
+from selenium.common.exceptions import TimeoutException, NoSuchElementException 
+import undetected_chromedriver as uc 
+from bs4 import BeautifulSoup 
 from time import sleep
 import pandas as pd
 
@@ -36,37 +36,79 @@ websites = [
     {"url": "https://alachua.realtaxdeed.com/", "county": "Alachua"},
     {"url": "https://baker.realtaxdeed.com/", "county": "Baker"},
     {"url": "https://www.baycoclerk.com/public-records/tax-deed-auctions/", "county": "Bay"},
-    {"url": "https://www.brevard.realforeclose.com/", "county": "Brevard"},
-    {"url": "https://www.charlotte.realforeclose.com/index.cfm", "county": "Charlotte"},
     {"url": "https://www.citrus.realtaxdeed.com/index.cfm", "county": "Citrus"},
     {"url": "https://clay.realtaxdeed.com/", "county": "Clay"},
     {"url": "https://duval.realtaxdeed.com/", "county": "Duval"},
     {"url": "https://www.escambia.realtaxdeed.com/index.cfm?resetcfcobjs=1", "county": "Escambia"},
     {"url": "https://flagler.realtaxdeed.com/", "county": "Flagler"},
     {"url": "https://gulf.realtaxdeed.com/", "county": "Gulf"},
-    {"url": "https://hendry.realtaxdeed.com/", "county": "Hendry"},
+    {"url": "https://www.gilchrist.realtaxdeed.com/", "county": "Gilchrist"},
+    {"url": "https://hendry.realtaxdeed.com/index.cfm", "county": "Hendry"},
+    {"url": "https://hernando.realtaxdeed.com/index.cfm", "county": "Hernando"},
     {"url": "https://hillsborough.realtaxdeed.com/", "county": "Hillsborough"},
     {"url": "https://www.indian-river.realtaxdeed.com/", "county": "Indian River"},
     {"url": "https://jackson.realtaxdeed.com/", "county": "Jackson"},
     {"url": "https://www.lake.realtaxdeed.com/", "county": "Lake"},
     {"url": "https://www.lee.realtaxdeed.com/index.cfm", "county": "Lee"},
-    {"url": "https://www.manatee.realforeclose.com/", "county": "Manatee"},
+    {"url": "https://leon.realtaxdeed.com/index.cfm", "county": "Leon"},
     {"url": "https://marion.realtaxdeed.com/index.cfm", "county": "Marion"},
     {"url": "https://martin.realtaxdeed.com/", "county": "Martin"},
-    {"url": "https://www.miamidade.realforeclose.com/index.cfm", "county": "Miami-Dade"},
+    {"url": "https://www.miamidade.realtaxdeed.com/index.cfm", "county": "Miami-Dade"},
     {"url": "https://nassau.realtaxdeed.com/", "county": "Nassau"},
     {"url": "https://okaloosa.realtaxdeed.com/", "county": "Okaloosa"},
     {"url": "https://orange.realtaxdeed.com/", "county": "Orange"},
     {"url": "https://www.osceola.realtaxdeed.com/", "county": "Osceola"},
     {"url": "https://palmbeach.realtaxdeed.com/", "county": "Palm Beach"},
     {"url": "https://pasco.realtaxdeed.com/", "county": "Pasco"},
+    {"url": "https://pinellas.realtaxdeed.com/index.cfm", "county": "Pinellas"},
     {"url": "https://polk.realtaxdeed.com/", "county": "Polk"},
     {"url": "https://putnam.realtaxdeed.com/", "county": "Putnam"},
-    {"url": "https://stlucie.realforeclose.com/", "county": "St. Lucie"},
+    {"url": "https://santa-rosa.realtaxdeed.com/index.cfm", "county": "Santa Rosa"},
+    {"url": "https://sarasota.realtaxdeed.com/index.cfm", "county": "Sarasota"},
+    {"url": "https://seminole.realtaxdeed.com/index.cfm", "county": "Seminole"},
     {"url": "https://www.volusia.realtaxdeed.com/", "county": "Volusia"},
-    {"url": "https://www.walton.realforeclose.com/", "county": "Walton"},
     {"url": "https://www.washington.realtaxdeed.com/index.cfm", "county": "Washington"},
+    {"url": "https://alachua.realforeclose.com/", "county": "Alachua"},
+    {"url": "https://www.bay.realforeclose.com/", "county": "Bay"},
+    {"url": "https://www.brevard.realforeclose.com/", "county": "Brevard"},
+    {"url": "https://calhoun.realforeclose.com/", "county": "Calhoun"},
+    {"url": "https://www.charlotte.realforeclose.com/index.cfm", "county": "Charlotte"},
+    {"url": "https://www.citrus.realforeclose.com/index.cfm", "county": "Citrus"},
+    {"url": "https://clay.realforeclose.com/", "county": "Clay"},
+    {"url": "https://duval.realforeclose.com/", "county": "Duval"},
+    {"url": "https://www.escambia.realforeclose.com/index.cfm?resetcfcobjs=1", "county": "Escambia"},
+    {"url": "https://flagler.realforeclose.com/", "county": "Flagler"},
+    {"url": "https://gulf.realforeclose.com/", "county": "Gulf"},
+    {"url": "https://www.gilchrist.realforeclose.com/", "county": "Gilchrist"},
+    {"url": "https://hillsborough.realforeclose.com/", "county": "Hillsborough"},
+    {"url": "https://www.indian-river.realforeclose.com/", "county": "Indian River"},
+    {"url": "https://jackson.realforeclose.com/", "county": "Jackson"},
+    {"url": "https://www.lake.realforeclose.com/", "county": "Lake"},
+    {"url": "https://www.lee.realforeclose.com/index.cfm", "county": "Lee"},
+    {"url": "https://leon.realforeclose.com/", "county": "Leon"},
+    {"url": "https://www.manatee.realforeclose.com/", "county": "Manatee"},
+    {"url": "https://marion.realforeclose.com/index.cfm", "county": "Marion"},
+    {"url": "https://martin.realforeclose.com/", "county": "Martin"},
+    {"url": "https://www.miamidade.realforeclose.com/index.cfm", "county": "Miami-Dade"},
+    {"url": "https://nassau.realforeclose.com/", "county": "Nassau"},
+    {"url": "https://okaloosa.realforeclose.com/", "county": "Okaloosa"},
+    {"url": "https://okeechobee.realforeclose.com/index.cfm", "county": "Okeechobee"},
+    {"url": "https://orange.realforeclose.com/", "county": "Orange"},
+    {"url": "https://www.osceola.realforeclose.com/", "county": "Osceola"},
+    {"url": "https://palmbeach.realforeclose.com/", "county": "Palm Beach"},
+    {"url": "https://pasco.realforeclose.com/", "county": "Pasco"},
+    {"url": "https://pinellas.realforeclose.com/index.cfm", "county": "Pinellas"},
+    {"url": "https://polk.realforeclose.com/", "county": "Polk"},
+    {"url": "https://putnam.realforeclose.com/", "county": "Putnam"},
+    {"url": "https://santa-rosa.realforeclose.com/index.cfm", "county": "Santa Rosa"},
+    {"url": "https://sarasota.realforeclose.com/index.cfm", "county": "Sarasota"},
+    {"url": "https://seminole.realforeclose.com/index.cfm", "county": "Seminole"},
+    {"url": "https://stlucie.realforeclose.com/", "county": "St. Lucie"},
+    {"url": "https://www.volusia.realforeclose.com/", "county": "Volusia"},
+    {"url": "https://www.walton.realforeclose.com/", "county": "Walton"},
+    {"url": "https://www.washington.realforeclose.com/index.cfm", "county": "Washington"}
 ]
+
 
 # Gets turned into dataframe and CSV at the end 
 all_auction_details_global = []
