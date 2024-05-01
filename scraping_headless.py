@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from time import sleep
 import pandas as pd
 import boto3
+import io
 
 # Get rid of weird uc error 
 def suppress_exception_in_del(uc):
@@ -298,6 +299,8 @@ for site in websites:
     
 driver.quit()
 
+
+'''
 df = pd.DataFrame(all_auction_details_global)
 
 # If you want to save this DataFrame to a CSV file
@@ -313,3 +316,23 @@ s3_key = 'output.csv'
 
 # Upload the file to S3
 s3.upload_file(local_file, bucket_name, s3_key)
+'''
+
+# Create DataFrame
+df = pd.DataFrame(all_auction_details_global)
+
+# Create an in-memory file-like object
+csv_buffer = io.BytesIO()
+
+# Write DataFrame to CSV in memory
+df.to_csv(csv_buffer, index=False)
+
+# Initialize the S3 client
+s3 = boto3.client('s3')
+
+# Specify the bucket name and the file key for S3
+bucket_name = 'blufetchbucket'
+s3_key = 'output.csv'
+
+# Upload the in-memory CSV to S3
+s3.put_object(Bucket=bucket_name, Key=s3_key, Body=csv_buffer.getvalue())
