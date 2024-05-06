@@ -299,25 +299,6 @@ for site in websites:
     
 driver.quit()
 
-
-'''
-df = pd.DataFrame(all_auction_details_global)
-
-# If you want to save this DataFrame to a CSV file
-df.to_csv('auction_details.csv', index=False)
-
-# Initialize the S3 client
-s3 = boto3.client('s3')
-
-# Specify the bucket name and the file to be uploaded
-bucket_name = 'blufetchbucket'
-local_file = 'auction_details.csv'
-s3_key = 'output.csv'
-
-# Upload the file to S3
-s3.upload_file(local_file, bucket_name, s3_key)
-'''
-
 # Create DataFrame
 df = pd.DataFrame(all_auction_details_global)
 
