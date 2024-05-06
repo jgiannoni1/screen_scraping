@@ -312,8 +312,8 @@ df.to_csv(csv_buffer, index=False)
 s3 = boto3.client('s3')
 
 # Specify the bucket name and the file key for S3
-bucket_name = 'blufetchbucket'
-s3_key = 'output.csv'
+bucket_name = 'blufetch'
+s3_key = 'PropertiesOutput.csv'
 
 # Upload the in-memory CSV to S3
 s3.put_object(Bucket=bucket_name, Key=s3_key, Body=csv_buffer.getvalue())
