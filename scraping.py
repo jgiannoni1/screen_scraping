@@ -114,6 +114,7 @@ websites = [
 all_auction_details_global = []
 
 for site in websites:
+    print(site["url"])
     driver.get(site["url"])
     initial_tab = driver.current_window_handle
 

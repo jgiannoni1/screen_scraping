@@ -9,6 +9,8 @@ from time import sleep
 import pandas as pd
 import boto3
 import io
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
 
 # Get rid of weird uc error 
 def suppress_exception_in_del(uc):
@@ -120,6 +122,7 @@ websites = [
 all_auction_details_global = []
 
 for site in websites:
+    print(site["url"])
     driver.get(site["url"])
     initial_tab = driver.current_window_handle
 
@@ -299,13 +302,74 @@ for site in websites:
     
 driver.quit()
 
+# Function to authenticate with Google Sheets
+def authenticate_google_sheets(json_key_path):
+    credentials = service_account.Credentials.from_service_account_file(json_key_path)
+    service = build('sheets', 'v4', credentials=credentials)
+    return service
+
+# Function to clear all data from Google Sheets
+def clear_entire_sheet(service, sheet_id):
+    # Retrieve sheet metadata to get sheet properties
+    sheet_metadata = service.spreadsheets().get(spreadsheetId=sheet_id).execute()
+    sheets = sheet_metadata.get('sheets', '')
+
+    # Build the requests to clear all sheets
+    requests = []
+    for sheet in sheets:
+        sheet_name = sheet['properties']['title']
+        # Assuming a range that spans the typical maximum used
+        clear_range = f"{sheet_name}!A1:Z1000"
+        requests.append({
+            "updateCells": {
+                "range": {
+                    "sheetId": sheet['properties']['sheetId'],
+                    "startRowIndex": 0,
+                    "startColumnIndex": 0
+                },
+                "fields": "userEnteredValue"
+            }
+        })
+
+    if requests:
+        body = {
+            'requests': requests
+        }
+        response = service.spreadsheets().batchUpdate(spreadsheetId=sheet_id, body=body).execute()
+        print('All data cleared from all sheets successfully:', response)
+
+# Function to write DataFrame to Google Sheet
+def write_dataframe_to_sheet(service, sheet_id, dataframe):
+    values = [dataframe.columns.values.tolist()] + dataframe.values.tolist()
+    body = {
+        'values': values
+    }
+    result = service.spreadsheets().values().update(
+        spreadsheetId=sheet_id,
+        range='A1',
+        valueInputOption='RAW',
+        body=body
+    ).execute()
+    print('Data uploaded to Google Sheet successfully:', result)
+
 # Create DataFrame
 df = pd.DataFrame(all_auction_details_global)
 
-# Create an in-memory file-like object
-csv_buffer = io.BytesIO()
+# Authenticate with Google Sheets API
+json_key_path = '/home/ec2-user/screen_scraping/api_key.json'
+service = authenticate_google_sheets(json_key_path)
 
-# Write DataFrame to CSV in memory
+# Google Sheet ID
+sheet_id = '1ahT5hU60jAWBIeNGukj189ROdeP5EAtbCNKg_Y4mp_M'
+
+# Clear all data from the sheet before updating
+clear_entire_sheet(service, sheet_id)
+
+# Write DataFrame to Google Sheet
+write_dataframe_to_sheet(service, sheet_id, df)
+
+# Create an in-memory file-like object for S3 upload
+csv_buffer = io.BytesIO()
 df.to_csv(csv_buffer, index=False)
 
 # Initialize the S3 client
@@ -316,4 +380,6 @@ bucket_name = 'blufetch'
 s3_key = 'PropertiesOutput.csv'
 
 # Upload the in-memory CSV to S3
+csv_buffer.seek(0)  # Go to the start of the buffer before reading for upload
 s3.put_object(Bucket=bucket_name, Key=s3_key, Body=csv_buffer.getvalue())
+print('Data uploaded to S3 successfully.')
