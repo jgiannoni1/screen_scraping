@@ -11,6 +11,8 @@ import boto3
 import io
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+import concurrent.futures
+import random
 
 # Get rid of weird uc error
 def suppress_exception_in_del(uc):
@@ -24,15 +26,44 @@ def suppress_exception_in_del(uc):
 suppress_exception_in_del(uc)
 
 # Initialize driver
-options = webdriver.ChromeOptions()
-options.add_argument("--headless")
-options.add_argument('--disable-gpu')
-options.add_argument('--no-sandbox')
-options.add_argument('--ignore-certificate-errors')
-options.add_argument('--allow-running-insecure-content')
-options.add_argument('--disable-dev-shm-usage')
-options.binary_location = "/usr/bin/google-chrome"
-driver = uc.Chrome(options=options)
+def init_driver(proxy=None):
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    options.add_argument('--disable-gpu')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument('--allow-running-insecure-content')
+    options.add_argument('--disable-dev-shm-usage')
+    options.binary_location = "/usr/bin/google-chrome"
+    driver = uc.Chrome(options=options, use_subprocess=True)
+
+    if proxy:
+        options.add_argument(f'--proxy-server={proxy}')
+
+    return driver
+
+proxies = [
+    "http://154.201.36.232:3128",
+    "http://154.202.107.13:3128",
+    "http://154.202.125.203:3128",
+    "http://156.239.55.197:3128",
+    "http://154.202.107.173:3128",
+    "http://154.202.127.131:3128",
+    "http://156.239.55.124:3128",
+    "http://154.202.99.206:3128",
+    "http://154.202.99.85:3128",
+    "http://156.239.53.81:3128",
+    "http://154.202.119.245:3128",
+    "http://156.239.49.72:3128",
+    "http://154.202.112.165:3128",
+    "http://154.202.118.170:3128",
+    "http://156.239.53.74:3128",
+    "http://154.202.119.148:3128",
+    "http://154.202.111.60:3128",
+    "http://156.239.53.128:3128",
+    "http://156.239.52.33:3128",
+    "http://154.201.36.117:3128",
+]
 
 websites = [
     {"url": "https://alachua.realtaxdeed.com/", "county": "Alachua"},
@@ -114,7 +145,9 @@ websites = [
 # Gets turned into dataframe and CSV at the end
 all_auction_details_global = []
 
-for site in websites:
+def process_site(site, proxy):
+    driver = init_driver(proxy)
+    auction_details_list = []
     print(site["url"])
     try:
         driver.get(site["url"])
@@ -132,7 +165,7 @@ for site in websites:
                 button.click()
             except (TimeoutException, NoSuchElementException) as e:
                 print(f"Error finding calendar button: {e}")
-                continue
+                return auction_details_list
 
         # Check if a new window/tab has been opened
         try:
@@ -215,42 +248,136 @@ for site in websites:
                     current_page = 1
 
                     while current_page <= total_pages:
-                        # Get and parse current page HTML and find dev class Head_W
+                        # Get the current page's HTML content
                         html_page = driver.page_source
+                        
+                        # Parse the current page's HTML
                         soup = BeautifulSoup(html_page, 'html.parser')
+                        
+                        # Find the <div class="Head_W">
                         head_w_div = soup.find('div', class_='Head_W')
-
+                        
                         if head_w_div:
+                            # Find all auction item containers on the page
                             auction_items = head_w_div.find_all('div', class_='AUCTION_ITEM PREVIEW')
+                            
+                            # List to store details of all auction items on the current page
                             all_auction_details = []
-
+                            
+                            # Extract details from each auction item container
                             for item in auction_items:
-                                # Handle multiline properties
-                                property_address_th = item.find('th', string='Property Address:')
+                                # Handle property addresses for both structures
                                 property_address = 'N/A'
-
+                                property_address_th = item.find('th', string='Property Address:')
                                 if property_address_th:
+                                    # Okeechobee structure
                                     property_address = property_address_th.find_next_sibling('td').text.strip()
                                     next_tr = property_address_th.find_parent('tr').find_next_sibling('tr')
-                                    if next_tr and not next_tr.find('th').text.strip():
+                                    if next_tr and not next_tr.find('th'):
                                         second_part = next_tr.find('td').text.strip()
                                         property_address += ', ' + second_part
+                                else:
+                                    # Orange structure
+                                    property_address_div = item.find('div', class_='AD_LBL', string='Property Address:')
+                                    if property_address_div:
+                                        property_address = property_address_div.find_next_sibling('div', class_='AD_DTA').text.strip()
+                                        second_part_div = property_address_div.find_next_sibling('div', class_='AD_LBL').find_next_sibling('div', class_='AD_DTA')
+                                        if second_part_div:
+                                            property_address += ', ' + second_part_div.text.strip()
+                                
+                                # Extract Parcel ID and Parcel ID Link
+                                parcel_id_th = item.find('th', string='Parcel ID:')
+                                parcel_id = 'N/A'
+                                parcel_id_link = 'N/A'
+                                if parcel_id_th:
+                                    parcel_id_td = parcel_id_th.find_next_sibling('td')
+                                    parcel_id_a = parcel_id_td.find('a') if parcel_id_td else None
+                                    if parcel_id_a:
+                                        parcel_id = parcel_id_a.text.strip()
+                                        parcel_id_link = parcel_id_a['href']
+                                    else:
+                                        parcel_id = parcel_id_td.text.strip() if parcel_id_td else 'N/A'
+                                else:
+                                    parcel_id_div = item.find('div', class_='AD_LBL', string='Parcel ID:')
+                                    if parcel_id_div:
+                                        parcel_id_dta_div = parcel_id_div.find_next_sibling('div', class_='AD_DTA')
+                                        parcel_id_a = parcel_id_dta_div.find('a') if parcel_id_dta_div else None
+                                        if parcel_id_a:
+                                            parcel_id = parcel_id_a.text.strip()
+                                            parcel_id_link = parcel_id_a['href']
+                                        else:
+                                            parcel_id = parcel_id_dta_div.text.strip() if parcel_id_dta_div else 'N/A'
+
+                                # Extract Case # and Case # Link
+                                case_th = item.find('th', string=lambda text: 'Case #' in text)
+                                case_number = 'N/A'
+                                case_link = 'N/A'
+                                if case_th:
+                                    case_td = case_th.find_next_sibling('td')
+                                    case_a = case_td.find('a') if case_td else None
+                                    if case_a:
+                                        case_number = case_a.text.strip()
+                                        case_link = case_a['href']
+                                    else:
+                                        case_number = case_td.text.strip() if case_td else 'N/A'
+                                else:
+                                    case_div = item.find('div', class_='AD_LBL', string=lambda text: 'Case #' in text)
+                                    if case_div:
+                                        case_dta_div = case_div.find_next_sibling('div', class_='AD_DTA')
+                                        case_a = case_dta_div.find('a') if case_dta_div else None
+                                        if case_a:
+                                            case_number = case_a.text.strip()
+                                            case_link = case_a['href']
+                                        else:
+                                            case_number = case_dta_div.text.strip() if case_dta_div else 'N/A'
+
+                                # Extract Assessed Value
+                                assessed_value_th = item.find('th', string='Assessed Value:')
+                                assessed_value = 'N/A'
+                                if assessed_value_th:
+                                    assessed_value_td = assessed_value_th.find_next_sibling('td')
+                                    assessed_value = assessed_value_td.text.strip() if assessed_value_td else 'N/A'
+                                else:
+                                    assessed_value_div = item.find('div', class_='AD_LBL', string='Assessed Value:')
+                                    if assessed_value_div:
+                                        assessed_value_dta_div = assessed_value_div.find_next_sibling('div', class_='AD_DTA')
+                                        assessed_value = assessed_value_dta_div.text.strip() if assessed_value_dta_div else 'N/A'
+                                
+                                # Extract Final Judgment Amount
+                                final_judgment_amount_th = item.find('th', string='Final Judgment Amount:')
+                                final_judgment_amount = 'N/A'
+                                if final_judgment_amount_th:
+                                    final_judgment_amount_td = final_judgment_amount_th.find_next_sibling('td')
+                                    final_judgment_amount = final_judgment_amount_td.text.strip() if final_judgment_amount_td else 'N/A'
+                                else:
+                                    final_judgment_amount_div = item.find('div', class_='AD_LBL', string='Final Judgment Amount:')
+                                    if final_judgment_amount_div:
+                                        final_judgment_amount_dta_div = final_judgment_amount_div.find_next_sibling('div', class_='AD_DTA')
+                                        final_judgment_amount = final_judgment_amount_dta_div.text.strip() if final_judgment_amount_dta_div else 'N/A'
+                                
+                                random_number = random.randint(100000, 999999)
+                                email_address = f"{site['county'].lower()}{random_number}@blufetch.com"
 
                                 auction_details = {
                                     'County': site["county"],
                                     'Property Address': property_address,
-                                    'Parcel ID': item.find('th', string='Parcel ID:').find_next_sibling('td').a.text if item.find('th', string='Parcel ID:') and item.find('th', string='Parcel ID:').find_next_sibling('td').a else 'N/A',
                                     'Auction Status': item.find('div', class_='ASTAT_MSGB').text if item.find('div', class_='ASTAT_MSGB') else 'N/A',
+                                    'Case #': case_number,
                                     'Auction Type': item.find('th', string='Auction Type:').find_next_sibling('td').text if item.find('th', string='Auction Type:') else 'N/A',
-                                    'Case #': item.find('th', string=lambda text: 'Case #' in text).find_next_sibling('td').text if item.find('th', string=lambda text: 'Case #' in text) else 'N/A',
-                                    'Parcel ID URL': item.find('th', string='Parcel ID:').find_next_sibling('td').find('a')['href'] if item.find('th', string='Parcel ID:') and item.find('th', string='Parcel ID:').find_next_sibling('td').find('a') else 'N/A',
+                                    'Case # Link': case_link,
+                                    'Parcel ID': parcel_id,
+                                    'Parcel ID Link': parcel_id_link,
                                     'Assessed Value': item.find('th', string='Assessed Value:').find_next_sibling('td').text if item.find('th', string='Assessed Value:') else 'N/A',
                                     'Opening Bid': item.find('th', string='Opening Bid:').find_next_sibling('td').text if item.find('th', string='Opening Bid:') else 'N/A',
+                                    'Final Judgment Amount': final_judgment_amount,
                                     'Certificate #': item.find('th', string='Certificate #:').find_next_sibling('td').text if item.find('th', string='Certificate #:') else 'N/A',
+                                    'County Site': site["url"],
+                                    'Tags': f"{site['county']}, {item.find('th', string='Auction Type:').find_next_sibling('td').text if item.find('th', string='Auction Type:') else 'N/A'}",
+                                    'Email Address': email_address
                                 }
                                 all_auction_details.append(auction_details)
 
-                            all_auction_details_global.extend(all_auction_details)
+                            auction_details_list.extend(all_auction_details)
                             
                             # After scraping, check if it's not the last page and click the "next page" button
                             if current_page < total_pages:
@@ -278,25 +405,21 @@ for site in websites:
     except Exception as e:
         print(f"Error loading site {site['url']}: {e}")
 
-driver.quit()
+    driver.quit()
+    return auction_details_list
 
-# Function to authenticate with Google Sheets
 def authenticate_google_sheets(json_key_path):
     credentials = service_account.Credentials.from_service_account_file(json_key_path)
     service = build('sheets', 'v4', credentials=credentials)
     return service
 
-# Function to clear all data from Google Sheets
 def clear_entire_sheet(service, sheet_id):
-    # Retrieve sheet metadata to get sheet properties
     sheet_metadata = service.spreadsheets().get(spreadsheetId=sheet_id).execute()
     sheets = sheet_metadata.get('sheets', '')
 
-    # Build the requests to clear all sheets
     requests = []
     for sheet in sheets:
         sheet_name = sheet['properties']['title']
-        # Assuming a range that spans the typical maximum used
         clear_range = f"{sheet_name}!A1:Z1000"
         requests.append({
             "updateCells": {
@@ -316,7 +439,6 @@ def clear_entire_sheet(service, sheet_id):
         response = service.spreadsheets().batchUpdate(spreadsheetId=sheet_id, body=body).execute()
         print('All data cleared from all sheets successfully:', response)
 
-# Function to write DataFrame to Google Sheet
 def write_dataframe_to_sheet(service, sheet_id, dataframe):
     values = [dataframe.columns.values.tolist()] + dataframe.values.tolist()
     body = {
@@ -329,6 +451,16 @@ def write_dataframe_to_sheet(service, sheet_id, dataframe):
         body=body
     ).execute()
     print('Data uploaded to Google Sheet successfully:', result)
+
+# Use concurrent futures to process sites concurrently with different proxies
+with concurrent.futures.ThreadPoolExecutor() as executor:
+    futures = []
+    for site in websites:
+        proxy = random.choice(proxies)
+        futures.append(executor.submit(process_site, site, proxy))
+    
+    for future in concurrent.futures.as_completed(futures):
+        all_auction_details_global.extend(future.result())
 
 # Create DataFrame
 df = pd.DataFrame(all_auction_details_global)
