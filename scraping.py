@@ -33,80 +33,7 @@ websites = [
 ]
 '''
 websites = [
-    {"url": "https://alachua.realtaxdeed.com/", "county": "Alachua"},
-    {"url": "https://baker.realtaxdeed.com/", "county": "Baker"},
-    {"url": "https://www.baycoclerk.com/public-records/tax-deed-auctions/", "county": "Bay"},
-    {"url": "https://www.citrus.realtaxdeed.com/index.cfm", "county": "Citrus"},
-    {"url": "https://clay.realtaxdeed.com/", "county": "Clay"},
-    {"url": "https://duval.realtaxdeed.com/", "county": "Duval"},
-    {"url": "https://www.escambia.realtaxdeed.com/index.cfm?resetcfcobjs=1", "county": "Escambia"},
-    {"url": "https://flagler.realtaxdeed.com/", "county": "Flagler"},
-    {"url": "https://gulf.realtaxdeed.com/", "county": "Gulf"},
-    {"url": "https://www.gilchrist.realtaxdeed.com/", "county": "Gilchrist"},
-    {"url": "https://hendry.realtaxdeed.com/index.cfm", "county": "Hendry"},
-    {"url": "https://hernando.realtaxdeed.com/index.cfm", "county": "Hernando"},
-    {"url": "https://hillsborough.realtaxdeed.com/", "county": "Hillsborough"},
-    {"url": "https://www.indian-river.realtaxdeed.com/", "county": "Indian River"},
-    {"url": "https://jackson.realtaxdeed.com/", "county": "Jackson"},
-    {"url": "https://www.lake.realtaxdeed.com/", "county": "Lake"},
-    {"url": "https://www.lee.realtaxdeed.com/index.cfm", "county": "Lee"},
-    {"url": "https://leon.realtaxdeed.com/index.cfm", "county": "Leon"},
-    {"url": "https://marion.realtaxdeed.com/index.cfm", "county": "Marion"},
-    {"url": "https://martin.realtaxdeed.com/", "county": "Martin"},
-    {"url": "https://www.miamidade.realtaxdeed.com/index.cfm", "county": "Miami-Dade"},
-    {"url": "https://nassau.realtaxdeed.com/", "county": "Nassau"},
-    {"url": "https://okaloosa.realtaxdeed.com/", "county": "Okaloosa"},
-    {"url": "https://orange.realtaxdeed.com/", "county": "Orange"},
-    {"url": "https://www.osceola.realtaxdeed.com/", "county": "Osceola"},
-    {"url": "https://palmbeach.realtaxdeed.com/", "county": "Palm Beach"},
-    {"url": "https://pasco.realtaxdeed.com/", "county": "Pasco"},
-    {"url": "https://pinellas.realtaxdeed.com/index.cfm", "county": "Pinellas"},
-    {"url": "https://polk.realtaxdeed.com/", "county": "Polk"},
-    {"url": "https://putnam.realtaxdeed.com/", "county": "Putnam"},
-    {"url": "https://santa-rosa.realtaxdeed.com/index.cfm", "county": "Santa Rosa"},
-    {"url": "https://sarasota.realtaxdeed.com/index.cfm", "county": "Sarasota"},
-    {"url": "https://seminole.realtaxdeed.com/index.cfm", "county": "Seminole"},
-    {"url": "https://www.volusia.realtaxdeed.com/", "county": "Volusia"},
-    {"url": "https://www.washington.realtaxdeed.com/index.cfm", "county": "Washington"},
-    {"url": "https://alachua.realforeclose.com/", "county": "Alachua"},
-    {"url": "https://www.bay.realforeclose.com/", "county": "Bay"},
-    {"url": "https://www.brevard.realforeclose.com/", "county": "Brevard"},
-    {"url": "https://calhoun.realforeclose.com/", "county": "Calhoun"},
-    {"url": "https://www.charlotte.realforeclose.com/index.cfm", "county": "Charlotte"},
-    {"url": "https://www.citrus.realforeclose.com/index.cfm", "county": "Citrus"},
-    {"url": "https://clay.realforeclose.com/", "county": "Clay"},
-    {"url": "https://duval.realforeclose.com/", "county": "Duval"},
-    {"url": "https://www.escambia.realforeclose.com/index.cfm?resetcfcobjs=1", "county": "Escambia"},
-    {"url": "https://flagler.realforeclose.com/", "county": "Flagler"},
-    {"url": "https://gulf.realforeclose.com/", "county": "Gulf"},
-    {"url": "https://www.gilchrist.realforeclose.com/", "county": "Gilchrist"},
-    {"url": "https://hillsborough.realforeclose.com/", "county": "Hillsborough"},
-    {"url": "https://www.indian-river.realforeclose.com/", "county": "Indian River"},
-    {"url": "https://jackson.realforeclose.com/", "county": "Jackson"},
-    {"url": "https://www.lake.realforeclose.com/", "county": "Lake"},
-    {"url": "https://www.lee.realforeclose.com/index.cfm", "county": "Lee"},
-    {"url": "https://leon.realforeclose.com/", "county": "Leon"},
-    {"url": "https://www.manatee.realforeclose.com/", "county": "Manatee"},
-    {"url": "https://marion.realforeclose.com/index.cfm", "county": "Marion"},
-    {"url": "https://martin.realforeclose.com/", "county": "Martin"},
-    {"url": "https://www.miamidade.realforeclose.com/index.cfm", "county": "Miami-Dade"},
-    {"url": "https://nassau.realforeclose.com/", "county": "Nassau"},
-    {"url": "https://okaloosa.realforeclose.com/", "county": "Okaloosa"},
-    {"url": "https://okeechobee.realforeclose.com/index.cfm", "county": "Okeechobee"},
     {"url": "https://orange.realforeclose.com/", "county": "Orange"},
-    {"url": "https://www.osceola.realforeclose.com/", "county": "Osceola"},
-    {"url": "https://palmbeach.realforeclose.com/", "county": "Palm Beach"},
-    {"url": "https://pasco.realforeclose.com/", "county": "Pasco"},
-    {"url": "https://pinellas.realforeclose.com/index.cfm", "county": "Pinellas"},
-    {"url": "https://polk.realforeclose.com/", "county": "Polk"},
-    {"url": "https://putnam.realforeclose.com/", "county": "Putnam"},
-    {"url": "https://santa-rosa.realforeclose.com/index.cfm", "county": "Santa Rosa"},
-    {"url": "https://sarasota.realforeclose.com/index.cfm", "county": "Sarasota"},
-    {"url": "https://seminole.realforeclose.com/index.cfm", "county": "Seminole"},
-    {"url": "https://stlucie.realforeclose.com/", "county": "St. Lucie"},
-    {"url": "https://www.volusia.realforeclose.com/", "county": "Volusia"},
-    {"url": "https://www.walton.realforeclose.com/", "county": "Walton"},
-    {"url": "https://www.washington.realforeclose.com/index.cfm", "county": "Washington"}
 ]
 
 
@@ -214,7 +141,6 @@ for site in websites:
 
             # Initialize the current page
             current_page = 1
-
             while current_page <= total_pages:
                 # Get the current page's HTML content
                 html_page = driver.page_source
@@ -226,7 +152,6 @@ for site in websites:
                 head_w_div = soup.find('div', class_='Head_W')
                 
                 if head_w_div:
-
                     # Find all auction item containers on the page
                     auction_items = head_w_div.find_all('div', class_='AUCTION_ITEM PREVIEW')
                     
@@ -235,34 +160,111 @@ for site in websites:
                     
                     # Extract details from each auction item container
                     for item in auction_items:
-                        # First we handle multi-line property addresses 
+                        # Handle property addresses for both structures
+                        property_address = 'N/A'
                         property_address_th = item.find('th', string='Property Address:')
-                        property_address = 'N/A'  # Default value
-                        
                         if property_address_th:
-                            # Extract the first part of the address
+                            # Okeechobee structure
                             property_address = property_address_th.find_next_sibling('td').text.strip()
-                            
-                            # Check for and append the second part of the address if it exists
                             next_tr = property_address_th.find_parent('tr').find_next_sibling('tr')
-                            if next_tr and not next_tr.find('th').text.strip():
+                            if next_tr and not next_tr.find('th'):
                                 second_part = next_tr.find('td').text.strip()
                                 property_address += ', ' + second_part
+                        else:
+                            # Orange structure
+                            property_address_div = item.find('div', class_='AD_LBL', string='Property Address:')
+                            if property_address_div:
+                                property_address = property_address_div.find_next_sibling('div', class_='AD_DTA').text.strip()
+                                second_part_div = property_address_div.find_next_sibling('div', class_='AD_LBL').find_next_sibling('div', class_='AD_DTA')
+                                if second_part_div:
+                                    property_address += ', ' + second_part_div.text.strip()
+                        
+                        # Extract Parcel ID and Parcel ID Link
+                        parcel_id_th = item.find('th', string='Parcel ID:')
+                        parcel_id = 'N/A'
+                        parcel_id_link = 'N/A'
+                        if parcel_id_th:
+                            parcel_id_td = parcel_id_th.find_next_sibling('td')
+                            parcel_id_a = parcel_id_td.find('a') if parcel_id_td else None
+                            if parcel_id_a:
+                                parcel_id = parcel_id_a.text.strip()
+                                parcel_id_link = parcel_id_a['href']
+                            else:
+                                parcel_id = parcel_id_td.text.strip() if parcel_id_td else 'N/A'
+                        else:
+                            parcel_id_div = item.find('div', class_='AD_LBL', string='Parcel ID:')
+                            if parcel_id_div:
+                                parcel_id_dta_div = parcel_id_div.find_next_sibling('div', class_='AD_DTA')
+                                parcel_id_a = parcel_id_dta_div.find('a') if parcel_id_dta_div else None
+                                if parcel_id_a:
+                                    parcel_id = parcel_id_a.text.strip()
+                                    parcel_id_link = parcel_id_a['href']
+                                else:
+                                    parcel_id = parcel_id_dta_div.text.strip() if parcel_id_dta_div else 'N/A'
+
+                        # Extract Case # and Case # Link
+                        case_th = item.find('th', string=lambda text: 'Case #' in text)
+                        case_number = 'N/A'
+                        case_link = 'N/A'
+                        if case_th:
+                            case_td = case_th.find_next_sibling('td')
+                            case_a = case_td.find('a') if case_td else None
+                            if case_a:
+                                case_number = case_a.text.strip()
+                                case_link = case_a['href']
+                            else:
+                                case_number = case_td.text.strip() if case_td else 'N/A'
+                        else:
+                            case_div = item.find('div', class_='AD_LBL', string=lambda text: 'Case #' in text)
+                            if case_div:
+                                case_dta_div = case_div.find_next_sibling('div', class_='AD_DTA')
+                                case_a = case_dta_div.find('a') if case_dta_div else None
+                                if case_a:
+                                    case_number = case_a.text.strip()
+                                    case_link = case_a['href']
+                                else:
+                                    case_number = case_dta_div.text.strip() if case_dta_div else 'N/A'
+
+                        # Extract Assessed Value
+                        assessed_value_th = item.find('th', string='Assessed Value:')
+                        assessed_value = 'N/A'
+                        if assessed_value_th:
+                            assessed_value_td = assessed_value_th.find_next_sibling('td')
+                            assessed_value = assessed_value_td.text.strip() if assessed_value_td else 'N/A'
+                        else:
+                            assessed_value_div = item.find('div', class_='AD_LBL', string='Assessed Value:')
+                            if assessed_value_div:
+                                assessed_value_dta_div = assessed_value_div.find_next_sibling('div', class_='AD_DTA')
+                                assessed_value = assessed_value_dta_div.text.strip() if assessed_value_dta_div else 'N/A'
+                        
+                        # Extract Final Judgment Amount
+                        final_judgment_amount_th = item.find('th', string='Final Judgment Amount:')
+                        final_judgment_amount = 'N/A'
+                        if final_judgment_amount_th:
+                            final_judgment_amount_td = final_judgment_amount_th.find_next_sibling('td')
+                            final_judgment_amount = final_judgment_amount_td.text.strip() if final_judgment_amount_td else 'N/A'
+                        else:
+                            final_judgment_amount_div = item.find('div', class_='AD_LBL', string='Final Judgment Amount:')
+                            if final_judgment_amount_div:
+                                final_judgment_amount_dta_div = final_judgment_amount_div.find_next_sibling('div', class_='AD_DTA')
+                                final_judgment_amount = final_judgment_amount_dta_div.text.strip() if final_judgment_amount_dta_div else 'N/A'
                         
                         auction_details = {
                             'County': site["county"],
                             'Property Address': property_address,
-                            'Parcel ID': item.find('th', string='Parcel ID:').find_next_sibling('td').a.text if item.find('th', string='Parcel ID:') and item.find('th', string='Parcel ID:').find_next_sibling('td').a else 'N/A',                            
+                            'Parcel ID': parcel_id,
+                            'Parcel ID Link': parcel_id_link,
+                            'Case #': case_number,
+                            'Case # Link': case_link,
                             'Auction Status': item.find('div', class_='ASTAT_MSGB').text if item.find('div', class_='ASTAT_MSGB') else 'N/A',
                             'Auction Type': item.find('th', string='Auction Type:').find_next_sibling('td').text if item.find('th', string='Auction Type:') else 'N/A',
-                            'Case #': item.find('th', string=lambda text: 'Case #' in text).find_next_sibling('td').text if item.find('th', string=lambda text: 'Case #' in text) else 'N/A',
-                            'Parcel ID URL': item.find('th', string='Parcel ID:').find_next_sibling('td').find('a')['href'] if item.find('th', string='Parcel ID:') and item.find('th', string='Parcel ID:').find_next_sibling('td').find('a') else 'N/A',                           
-                            'Assessed Value': item.find('th', string='Assessed Value:').find_next_sibling('td').text if item.find('th', string='Assessed Value:') else 'N/A',                            
+                            'Assessed Value': assessed_value,
                             'Opening Bid': item.find('th', string='Opening Bid:').find_next_sibling('td').text if item.find('th', string='Opening Bid:') else 'N/A',
                             'Certificate #': item.find('th', string='Certificate #:').find_next_sibling('td').text if item.find('th', string='Certificate #:') else 'N/A',
+                            'Final Judgment Amount': final_judgment_amount,
                         }
                         all_auction_details.append(auction_details)
-
+            
                     
                     # Add the current page's items to the global list
                     all_auction_details_global.extend(all_auction_details)

@@ -355,8 +355,6 @@ def process_site(site, proxy):
                                         final_judgment_amount_dta_div = final_judgment_amount_div.find_next_sibling('div', class_='AD_DTA')
                                         final_judgment_amount = final_judgment_amount_dta_div.text.strip() if final_judgment_amount_dta_div else 'N/A'
                                 
-                                random_number = random.randint(100000, 999999)
-                                email_address = f"{site['county'].lower()}{random_number}@blufetch.com"
 
                                 auction_details = {
                                     'County': site["county"],
@@ -371,9 +369,7 @@ def process_site(site, proxy):
                                     'Opening Bid': item.find('th', string='Opening Bid:').find_next_sibling('td').text if item.find('th', string='Opening Bid:') else 'N/A',
                                     'Final Judgment Amount': final_judgment_amount,
                                     'Certificate #': item.find('th', string='Certificate #:').find_next_sibling('td').text if item.find('th', string='Certificate #:') else 'N/A',
-                                    'County Site': site["url"],
                                     'Tags': f"{site['county']}, {item.find('th', string='Auction Type:').find_next_sibling('td').text if item.find('th', string='Auction Type:') else 'N/A'}",
-                                    'Email Address': email_address
                                 }
                                 all_auction_details.append(auction_details)
 
@@ -463,7 +459,7 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
         all_auction_details_global.extend(future.result())
 
 # Create DataFrame
-df = pd.DataFrame(all_auction_details_global)
+df = pd.DataFrame(all_auction_details_global).drop_duplicates()
 
 # Authenticate with Google Sheets API
 json_key_path = '/home/ec2-user/screen_scraping/api_key.json'
